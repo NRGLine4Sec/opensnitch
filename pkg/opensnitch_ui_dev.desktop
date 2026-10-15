@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=OpenSnitch (dev)
+Exec=opensnitch-ui-dev
+TryExec=opensnitch-ui-dev
+Icon=opensnitch-ui-dev
+GenericName=OpenSnitch Firewall (development build)
+Comment=Interactive application firewall, with port scan detection
+Terminal=false
+NoDisplay=false
+Categories=System;Security;Monitor;Network;
+Keywords=system;firewall;policies;security;portscan;

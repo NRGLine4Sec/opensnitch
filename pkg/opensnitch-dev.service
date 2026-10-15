@@ -1,0 +1,22 @@
+[Unit]
+Description=Application firewall OpenSnitch (development build with port scan detection)
+Documentation=https://github.com/evilsocket/opensnitch/wiki
+Wants=network.target
+After=network.target
+# Both daemons drive the same nftables tables and netfilter queue: starting
+# one stops the other, so they never run together. The ordering makes systemd
+# finish that stop before the start, in both directions; without it the two
+# jobs ran in parallel and the starting daemon found netfilter queue 0 still
+# bound.
+Conflicts=opensnitch.service
+After=opensnitch.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/opensnitchd-dev -config-file /etc/opensnitchd-dev/default-config.json -rules-path /etc/opensnitchd-dev/rules -fw-config-file /etc/opensnitchd-dev/system-fw.json
+Restart=always
+RestartSec=30
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+# The bytecode Python writes when the GUI runs as root is not dpkg's: remove
+# it, or the package's directories stay behind after a purge.
+if [ -d /usr/lib/opensnitch-ui-dev ]; then
+    find /usr/lib/opensnitch-ui-dev -name __pycache__ -type d -prune -exec rm -rf {} + || true
+fi
+exit 0

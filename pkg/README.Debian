@@ -1,0 +1,34 @@
+opensnitch-dev: development build with inbound port scan detection
+==================================================================
+
+This package installs beside the official "opensnitch" and
+"python3-opensnitch-ui" packages without sharing any file with them:
+
+  daemon         /usr/bin/opensnitchd-dev
+  configuration  /etc/opensnitchd-dev/        (PortScan enabled, policy "ask")
+  eBPF modules   /usr/lib/opensnitchd-dev/ebpf/
+  service        opensnitch-dev.service
+  log            /var/log/opensnitchd-dev.log
+  GUI            opensnitch-ui-dev, settings in ~/.config/opensnitch-dev/
+  GUI socket     unix:///tmp/osui-dev.sock
+
+The service is neither enabled nor started on install. The two daemons drive
+the same nftables tables and netfilter queue, so opensnitch-dev.service
+declares Conflicts=opensnitch.service: starting one stops the other. To use
+this build:
+
+  sudo systemctl disable --now opensnitch.service
+  sudo systemctl enable --now opensnitch-dev.service
+  opensnitch-ui-dev &
+
+To go back:
+
+  sudo systemctl disable --now opensnitch-dev.service
+  sudo systemctl enable --now opensnitch.service
+
+Purging opensnitch-dev keeps /etc/opensnitchd-dev/rules when it holds rules
+you created: they are your data. Remove the directory by hand to forget them.
+
+Port scan detection settings are in the "PortScan" section of
+/etc/opensnitchd-dev/default-config.json; see the project wiki pages
+"Port Scan Detection".

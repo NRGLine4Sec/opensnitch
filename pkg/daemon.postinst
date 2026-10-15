@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+# Not enabled or started on install: the official opensnitch.service may be
+# the one in use. Enable this one explicitly (it stops the official one):
+#   systemctl disable --now opensnitch.service
+#   systemctl enable --now opensnitch-dev.service
+if [ "$1" = "configure" ] && [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    if systemctl is-active --quiet opensnitch-dev.service; then
+        systemctl restart opensnitch-dev.service || true
+    fi
+fi
+exit 0
